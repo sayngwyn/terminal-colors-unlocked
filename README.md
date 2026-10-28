@@ -62,6 +62,12 @@ In MCM, open **Terminal Colors Unlocked**. Or play the **Terminal Colors Unlocke
 
 Open an issue here, or post in the Nexus page's Bugs tab, with your game version, F4SE version and what you saw. You can also find me on [Discord](https://discord.gg/QZHymBYMxP).
 
+## More by sayngwyn
+
+[![All my mods on Nexus, every game](https://sayngwyn.com/img/mods/button-all-mods-v1.png)](https://www.nexusmods.com/profile/sayngwyn/mods)
+
+Also on [my website](https://sayngwyn.com/projects).
+
 ---
 
 Made with AI. Claude contributed heavily under my direction: I decided what it does and checked it, and the AI wrote most of the code, its tests and these docs.
