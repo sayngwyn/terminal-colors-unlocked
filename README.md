@@ -16,6 +16,7 @@ Pick the colour of terminal text, separate from your Pip-Boy. It works with Pip-
 - **No more white terminals.** Turning Pip-Boy FX off normally leaves terminal text plain white. Now it keeps a colour.
 
 <p align="center"><img alt="A terminal showing amber text" src="docs/screenshots/terminal.png"></p>
+<p align="center"><sub><i>A vanilla terminal with amber text, set by this mod. Pick any colour and every terminal uses it.</i></sub></p>
 
 ## What you get
 
@@ -24,6 +25,7 @@ Pick the colour of terminal text, separate from your Pip-Boy. It works with Pip-
 - **A light plugin.** ESL-flagged, so it takes no load order slot.
 
 <p align="center"><img alt="The mod's MCM page with presets, sliders and a terminal preview" src="docs/screenshots/mcm.png"></p>
+<p align="center"><sub><i>The MCM page: choose a preset or set red, green and blue, and the preview shows the colour before you open a terminal.</i></sub></p>
 
 ## Install
 
