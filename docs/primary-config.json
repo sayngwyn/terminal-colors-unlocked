@@ -1,5 +1,5 @@
 {"out": "dist/nexus-upload/primary.png",
- "name": "Terminal Colors Unlocked", "line": "Give terminal text its own colour", "eyebrow": "FALLOUT 4 MOD",
+ "name": "Terminal Colors Unlocked", "line": "Finally.\nTerminals get the color\nfreedom they deserve.", "eyebrow": "FALLOUT 4 MOD",
  "cards_area": [0.46, 0.12, 0.49, 0.78],
  "cards": [
   {"image": "docs/screenshots/terminal.png", "crop": [300, 140, 1400, 935], "share": 0.97, "max_scale": 1.3},

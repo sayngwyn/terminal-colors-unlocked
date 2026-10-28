@@ -2,6 +2,8 @@
 <img alt="Terminal Colors Unlocked, a Fallout 4 mod" src="docs/header.png">
 </p>
 
+**Finally. Terminals get the color freedom they deserve.**
+
 Pick the colour of terminal text, separate from your Pip-Boy. It works with Pip-Boy FX on or off and needs no ini edits.
 
 <p align="center"><picture>
