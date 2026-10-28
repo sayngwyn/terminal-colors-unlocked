@@ -32,7 +32,7 @@ Pick the colour of terminal text, separate from your Pip-Boy. It works with Pip-
 
 **Needs:** F4SE (0.6.23 for 1.10.163, 0.7.x for later versions), Address Library for F4SE Plugins, and the Microsoft Visual C++ 2015-2022 redistributable (x64). MCM is optional.
 
-**Tested on:** OG (1.10.163) and AE (1.11.240). NG (1.10.984): untested.
+**Tested on:** OG (1.10.163), NG (1.10.984) and AE (1.11.240).
 
 ## Choose what it does
 
