@@ -74,8 +74,15 @@ Also on [my website](https://sayngwyn.com/projects).
 
 ---
 
+## Credits
+
+- **F4SE team** for Fallout 4 Script Extender.
+- **meh321** for Address Library for F4SE Plugins.
+- **CommonLibF4** for the library the plugin is built on (Ryan-rsm-McKenzie, alandtse, the libxse team and contributors).
+- **MCM team** for Mod Configuration Menu.
+
 Made with AI. Claude contributed heavily under my direction: I decided what it does and checked it, and the AI wrote most of the code, its tests and these docs.
 
 ## Licence
 
-GPL-3.0 (see `LICENSE`). The next-gen DLL is built with libxse/commonlibf4 (GPL-3.0 with a modding exception); the old-gen DLL with alandtse/CommonLibF4 (MIT).
+GPL-3.0 (see `LICENSE`). The next-gen DLL is built with libxse/commonlibf4 (GPL-3.0 with a modding exception); the old-gen DLL with alandtse/CommonLibF4 (MIT). Their licence texts are in `licenses\`, and the download carries them in its `Licenses` folder.

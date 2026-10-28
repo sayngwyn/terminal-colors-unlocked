@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+- The download now includes the licence (GPL-3.0), a note on where the source is, and the CommonLibF4 licences, in a Licenses folder. Nothing in the game changes.
+
 ## 1.0.0
 
 First release.

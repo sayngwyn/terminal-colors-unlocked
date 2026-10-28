@@ -1,0 +1,15 @@
+Terminal Colors Unlocked, by sayngwyn
+
+Licence: GPL-3.0 (LICENSE.txt in this folder).
+Source code: https://github.com/sayngwyn/terminal-colors-unlocked
+
+The F4SE plugins (TerminalColorsUnlocked.dll) are built with:
+- Old-gen (Fallout 4 1.10.163 and 1.10.984): CommonLibF4 by Ryan-rsm-McKenzie,
+  alandtse's fork, https://github.com/alandtse/CommonLibF4
+  (MIT; CommonLibF4-alandtse-MIT.txt).
+- Next-gen (Fallout 4 1.11): commonlibf4 by the libxse team,
+  https://github.com/libxse/commonlibf4
+  (GPL-3.0 with a modding exception; commonlibf4-libxse-LICENSE.txt and
+  commonlibf4-libxse-EXCEPTIONS.txt).
+
+This folder is for reading only; the installer doesn't install it.

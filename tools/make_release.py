@@ -1,7 +1,8 @@
 """Assemble the FOMOD release zip from a built package and both DLLs.
 
 Layout: fomod/, "00 Core" (plugin, archive, MCM), "10 Old-gen" and
-"20 Next-gen" (F4SE/Plugins/TerminalColorsUnlocked.dll each). Entries are
+"20 Next-gen" (F4SE/Plugins/TerminalColorsUnlocked.dll each), Licenses
+(LICENSE, NOTICE and the CommonLibF4 licences; not installed). Entries are
 sorted with a fixed timestamp, so the same inputs give the same zip.
 Usage: python make_release.py <repo> <package dir> <out.zip>
 """
@@ -29,6 +30,10 @@ def main(repo, package, out):
             entries[f'00 Core/{rel.as_posix()}'] = f
     entries[f'10 Old-gen/{DLL.as_posix()}'] = repo / 'dll/og/build/TerminalColorsUnlocked.dll'
     entries[f'20 Next-gen/{DLL.as_posix()}'] = repo / 'dll/ng/build/windows/x64/releasedbg/TerminalColorsUnlocked.dll'
+    # The DLLs carry GPL-3.0 and MIT code: ship the licences and where the source is.
+    entries['Licenses/LICENSE.txt'] = repo / 'LICENSE'
+    for f in (repo / 'licenses').iterdir():
+        entries[f'Licenses/{f.name}'] = f
     for name, src in entries.items():
         if not src.is_file():
             sys.exit(f'missing: {src} (for {name})')
