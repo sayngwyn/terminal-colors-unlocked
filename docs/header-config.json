@@ -1,5 +1,7 @@
 {"out": "dist/nexus-upload/header.png",
+ "title": "Terminal Colors Unlocked",
  "eyebrow": "FALLOUT 4 MOD", "tagline": "Give terminal text its own colour",
+ "scale": 2, "hq": true, "cards_area": [690, 26, 570, 250], "over_floor": true,
  "cards": [
   {"image": "docs/screenshots/mcm.png", "crop": [627, 53, 1440, 733]},
   {"image": "docs/screenshots/terminal.png", "crop": [390, 213, 1027, 907]}]}
