@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fomod>
+	<Name>Terminal Colors Unlocked</Name>
+	<Author>sayngwyn</Author>
+	<Version>1.0.0</Version>
+	<Description>Gives terminal text its own colour, with Pip-Boy FX on or off. Set it in MCM or with the included holotape.</Description>
+	<Groups>
+		<element>User Interface</element>
+	</Groups>
+</fomod>

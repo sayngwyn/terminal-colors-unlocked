@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://qconsulting.ca/fo3/ModConfig5.0.xsd">
+	<moduleName>Terminal Colors Unlocked</moduleName>
+	<requiredInstallFiles>
+		<folder source="00 Core" destination="" />
+	</requiredInstallFiles>
+	<installSteps order="Explicit">
+		<installStep name="Game version">
+			<optionalFileGroups order="Explicit">
+				<group name="Which version of Fallout 4 do you play?" type="SelectExactlyOne">
+					<plugins order="Explicit">
+						<plugin name="1.11 (current Steam version)">
+							<description>For Fallout 4 1.11.240, the current version on Steam. Needs F4SE 0.7.x and the Visual C++ 2015-2022 redistributable.</description>
+							<files>
+								<folder source="20 Next-gen" destination="" />
+							</files>
+							<typeDescriptor>
+								<dependencyType>
+									<defaultType name="Optional" />
+									<patterns>
+										<pattern>
+											<dependencies operator="And">
+												<gameDependency version="1.11.0" />
+											</dependencies>
+											<type name="Recommended" />
+										</pattern>
+									</patterns>
+								</dependencyType>
+							</typeDescriptor>
+						</plugin>
+						<plugin name="1.10.163 or 1.10.984 (older versions)">
+							<description>For Fallout 4 1.10.163 (before the 2024 update, F4SE 0.6.23) or 1.10.984 (the 2024 update, F4SE 0.7.x). Needs the Visual C++ 2015-2022 redistributable.</description>
+							<files>
+								<folder source="10 Old-gen" destination="" />
+							</files>
+							<typeDescriptor>
+								<dependencyType>
+									<defaultType name="Recommended" />
+									<patterns>
+										<pattern>
+											<dependencies operator="And">
+												<gameDependency version="1.11.0" />
+											</dependencies>
+											<type name="Optional" />
+										</pattern>
+									</patterns>
+								</dependencyType>
+							</typeDescriptor>
+						</plugin>
+					</plugins>
+				</group>
+			</optionalFileGroups>
+		</installStep>
+	</installSteps>
+</config>

@@ -1,0 +1,12 @@
+.venv/
+test-env/
+dist/
+results/
+logs/
+__pycache__/
+*.pyc
+.pytest_cache/
+.claude/
+dll/*/build/
+dll/*/.xmake/
+dll/*/vsxmake*/

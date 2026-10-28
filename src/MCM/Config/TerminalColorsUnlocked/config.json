@@ -1,0 +1,90 @@
+{
+	"modName": "TerminalColorsUnlocked",
+	"displayName": "Terminal Colors Unlocked",
+	"minMcmVersion": 2,
+	"pluginRequirements": [
+		"TerminalColorsUnlocked.esp"
+	],
+	"content": [
+		{
+			"text": "<font size='24'><b>Terminal Colors Unlocked</b></font>",
+			"type": "section"
+		},
+		{
+			"text": "Sets the colour of terminal text, whatever your Pip-Boy, ini or other mods say. Changes show the next time you open a terminal.",
+			"type": "text",
+			"html": true
+		},
+		{
+			"id": "Enabled",
+			"text": "Colour terminals",
+			"type": "switcher",
+			"help": "Off leaves terminals exactly as the game draws them.",
+			"valueOptions": {
+				"sourceType": "GlobalValue",
+				"sourceForm": "TerminalColorsUnlocked.esp|800"
+			}
+		},
+		{
+			"text": "Colour",
+			"type": "section"
+		},
+		{
+			"type": "image",
+			"libName": "TerminalColorsUnlocked",
+			"className": "TCUSwatch",
+			"width": 560,
+			"height": 100
+		},
+		{
+			"id": "Preset",
+			"text": "Preset",
+			"type": "dropdown",
+			"help": "Pick a ready-made colour, or Custom to use the sliders below.",
+			"valueOptions": {
+				"sourceType": "GlobalValue",
+				"sourceForm": "TerminalColorsUnlocked.esp|805",
+				"options": ["Custom", "Classic green", "Amber", "White", "Blue", "Red"]
+			}
+		},
+		{
+			"id": "Red",
+			"text": "Red",
+			"type": "slider",
+			"help": "Red part of the colour, 0 to 255.",
+			"valueOptions": {
+				"min": 0,
+				"max": 255,
+				"step": 1,
+				"sourceType": "GlobalValue",
+				"sourceForm": "TerminalColorsUnlocked.esp|801"
+			}
+		},
+		{
+			"id": "Green",
+			"text": "Green",
+			"type": "slider",
+			"help": "Green part of the colour, 0 to 255.",
+			"valueOptions": {
+				"min": 0,
+				"max": 255,
+				"step": 1,
+				"sourceType": "GlobalValue",
+				"sourceForm": "TerminalColorsUnlocked.esp|802"
+			}
+		},
+		{
+			"id": "Blue",
+			"text": "Blue",
+			"type": "slider",
+			"help": "Blue part of the colour, 0 to 255.",
+			"valueOptions": {
+				"min": 0,
+				"max": 255,
+				"step": 1,
+				"sourceType": "GlobalValue",
+				"sourceForm": "TerminalColorsUnlocked.esp|803"
+			}
+		}
+	]
+}

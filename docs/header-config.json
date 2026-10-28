@@ -1,0 +1,5 @@
+{"out": "dist/nexus-upload/header.png",
+ "eyebrow": "FALLOUT 4 MOD", "tagline": "Give terminal text its own colour",
+ "cards": [
+  {"image": "docs/screenshots/mcm.png", "crop": [627, 53, 1440, 733]},
+  {"image": "docs/screenshots/terminal.png", "crop": [390, 213, 1027, 907]}]}
