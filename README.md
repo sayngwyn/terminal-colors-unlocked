@@ -64,7 +64,7 @@ In MCM, open **Terminal Colors Unlocked**. Or play the **Terminal Colors Unlocke
 
 ## Report a problem
 
-Open an issue here, or post in the Nexus page's Bugs tab, with your game version, F4SE version and what you saw. You can also find me on [Discord](https://discord.gg/QZHymBYMxP).
+Open an issue here, or post in the Nexus page's Bugs tab, with your game version, F4SE version and what you saw. You can also find me on [Discord](https://discord.com/invite/sayngwyn).
 
 ## More by sayngwyn
 
