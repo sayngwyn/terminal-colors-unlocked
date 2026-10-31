@@ -21,7 +21,12 @@ add_compile_options("/d1trimfile:${TCU_TRIM_ROOT}")
 set(COMMONLIBF4_DIR "" CACHE PATH "alandtse/CommonLibF4's CommonLibF4 folder")
 add_subdirectory("${COMMONLIBF4_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/CommonLibF4")
 
-add_library(TerminalColorsUnlocked SHARED src/main.cpp src/pch.h ../src/Natives.h)
+add_library(TerminalColorsUnlocked SHARED src/main.cpp src/pch.h ../src/Natives.h ../src/WorldTint.h ../src/SelfTest.h)
+# Self-test build only (build.bat test): never in a release.
+option(TCU_SELFTEST "Build the in-game self-test" OFF)
+if(TCU_SELFTEST)
+	target_compile_definitions(TerminalColorsUnlocked PRIVATE TCU_SELFTEST)
+endif()
 set_target_properties(TerminalColorsUnlocked PROPERTIES CXX_STANDARD 23 CXX_STANDARD_REQUIRED ON)
 target_compile_definitions(TerminalColorsUnlocked PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX UNICODE _UNICODE)
 target_include_directories(TerminalColorsUnlocked PRIVATE src ../src)

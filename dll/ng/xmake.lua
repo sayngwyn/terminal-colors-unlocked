@@ -10,13 +10,20 @@ set_warnings("allextra")
 
 add_rules("mode.debug", "mode.releasedbg")
 
+-- Self-test build only (build.bat test): never in a release.
+option("selftest", function()
+    set_default(false)
+    add_defines("TCU_SELFTEST")
+end)
+
 target("TerminalColorsUnlocked")
     add_rules("commonlibf4.plugin", {
         name = "TerminalColorsUnlocked",
         author = "sayngwyn",
-        description = "Terminal Colors Unlocked: lets its scripts read ini settings"
+        description = "Terminal Colors Unlocked: ini reads for its scripts and the terminal screen tint"
     })
 
+    add_options("selftest")
     add_files("src/**.cpp")
     add_headerfiles("src/**.h", "../src/**.h")
     add_includedirs("src", "../src")

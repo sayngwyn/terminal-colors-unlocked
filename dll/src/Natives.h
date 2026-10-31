@@ -2,11 +2,15 @@
 // Papyrus natives shared by both DLLs (script TerminalColorsUnlockedNative).
 // Scripts can set ini values (Utility.SetINIFloat) but never read them; these
 // read the game's in-memory settings, so the mod can learn the player's
-// Pip-Boy colour and whether Pip-Boy FX is on.
+// Pip-Boy colour and whether Pip-Boy FX is on. Since version 2 they also
+// drive the live tint of the prompt on terminal models (WorldTint.h).
+
+#include "WorldTint.h"
 
 namespace TCU
 {
-	inline constexpr std::int32_t kVersion = 1;
+	// 2 (1.1): adds SetWorldTint / ClearWorldTint (live tint on terminal models).
+	inline constexpr std::int32_t kVersion = 2;
 
 	inline bool SameKey(std::string_view a, std::string_view b)
 	{
@@ -69,6 +73,8 @@ namespace TCU
 		a_vm->BindNativeMethod(script, "HasINISetting"sv, HasINISetting, true);
 		a_vm->BindNativeMethod(script, "GetINIFloat"sv, GetINIFloat, true);
 		a_vm->BindNativeMethod(script, "GetINIBool"sv, GetINIBool, true);
+		a_vm->BindNativeMethod(script, "SetWorldTint"sv, Tint::SetWorldTint, true);
+		a_vm->BindNativeMethod(script, "ClearWorldTint"sv, Tint::ClearWorldTint, true);
 		return true;
 	}
 }

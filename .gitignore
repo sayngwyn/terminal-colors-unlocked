@@ -8,5 +8,7 @@ __pycache__/
 .pytest_cache/
 .claude/
 dll/*/build/
+dll/*/build-test/
+dll/ng/bt/
 dll/*/.xmake/
 dll/*/vsxmake*/

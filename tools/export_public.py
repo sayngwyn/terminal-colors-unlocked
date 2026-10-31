@@ -21,7 +21,8 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 BRANCH = "public"
-PRIVATE = ["STATUS.md", "STATUS-archive.md", "CLAUDE.md", "reports"]  # project records
+PRIVATE = ["STATUS.md", "STATUS-archive.md", "CLAUDE.md", "reports",  # project records
+           "tools/selftest.json"]  # dev-side in-game test spec
 
 
 def git(*args: str, env: dict | None = None) -> str:

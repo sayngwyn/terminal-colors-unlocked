@@ -13,7 +13,7 @@ Pick the colour of terminal text, separate from your Pip-Boy. It works with Pip-
 
 ## How it works
 
-- **Your colour on every terminal.** Terminal screens, holotapes played in a terminal and the terminal's buttons all use the colour you pick.
+- **Your colour on every terminal.** Terminal screens, holotapes played in a terminal and the terminal's buttons all use the colour you pick, and so do the prompt and blinking cursor on the screen as you walk up to a terminal.
 - **Pip-Boy FX on or off.** With FX on, the game draws terminals in your Pip-Boy colour, so the mod lends your terminal colour to the Pip-Boy while a terminal is open and puts your own colour back when you leave. With FX off, it tints the terminal screen directly.
 - **No more white terminals.** Turning Pip-Boy FX off normally leaves terminal text plain white. Now it keeps a colour.
 
@@ -49,8 +49,8 @@ In MCM, open **Terminal Colors Unlocked**. Or play the **Terminal Colors Unlocke
 ## Good to know
 
 - Not compatible with other mods that change terminal colours. Use one at a time.
+- **What is Pip-Boy FX?** It's a Fallout 4 setting (`bPipboyDisableFX` under `[Pipboy]` in `Fallout4Custom.ini`; there's no in-game option). On, the Pip-Boy gets scanlines, flicker and its colour. Off, text is clearer and easier to read, so many players turn it off, but terminal text then turns plain white. This mod gives terminals your colour either way, and holotapes you play on your Pip-Boy keep your Pip-Boy colour.
 - With Pip-Boy FX on, your Pip-Boy colour only changes while a terminal is open, and only in memory: your saved settings are never touched.
-- With Pip-Boy FX on, holotapes played on the Pip-Boy itself keep the Pip-Boy colour.
 - Changes from MCM show the next time you open a terminal.
 
 <details><summary>Build it yourself</summary>

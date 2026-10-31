@@ -38,6 +38,8 @@ String[] TintPaths
 String Property FXOffSetting = "bPipboyDisableFX:Pipboy" AutoReadOnly
 String[] PipboyColorSettings
 Int DllVersion
+; First DLL version with SetWorldTint / ClearWorldTint.
+Int Property WorldTintDllVersion = 2 AutoReadOnly
 Bool Swapped
 Float[] SavedPipboyColor
 
@@ -65,9 +67,14 @@ Function Setup()
 	; A terminal can't be open across a load, and the game's settings are
 	; the player's own again, so there's nothing to put back.
 	Swapped = False
+	; Setup can run twice at once (OnInit and a load event). The flag is set
+	; before the item is added, so only one run gives it.
 	If !HolotapeGiven
-		Game.GetPlayer().AddItem(TCU_ConfigHolotape, 1, True)
 		HolotapeGiven = True
+		If Game.GetPlayer().GetItemCount(TCU_ConfigHolotape) == 0
+			Game.GetPlayer().AddItem(TCU_ConfigHolotape, 1, True)
+			Debug.Trace("TerminalColorsUnlocked: gave the settings holotape")
+		EndIf
 	EndIf
 	If F4SE.GetVersionRelease() == 0 ; F4SE missing
 		DllVersion = 0
@@ -84,6 +91,8 @@ Function Setup()
 	SetupPresets()
 	; MCM sends this through F4SE, so nothing here needs MCM installed.
 	RegisterForExternalEvent("OnMCMSettingChange|" + ModName, "OnMCMSettingChange")
+	; The DLL forgets the colour when the game closes: give it again.
+	ApplyWorldTint()
 EndFunction
 
 ; The MCM page applies presets itself (instantly, see TCUSwatch.as); this
@@ -93,6 +102,20 @@ Function OnMCMSettingChange(String modName, String id)
 	If id == "Preset"
 		ApplyPreset()
 	EndIf
+	ApplyWorldTint()
+EndFunction
+
+; Live tint (DLL 2+): the green prompt and cursor drawn on terminal models
+; take the terminal colour, or vanilla green again while the mod is off.
+Function ApplyWorldTint()
+	If DllVersion < WorldTintDllVersion
+		Return
+	EndIf
+	If TCU_Enabled.GetValueInt() == 0
+		TerminalColorsUnlockedNative.ClearWorldTint()
+		Return
+	EndIf
+	TerminalColorsUnlockedNative.SetWorldTint(Clamp(TCU_Red.GetValueInt()), Clamp(TCU_Green.GetValueInt()), Clamp(TCU_Blue.GetValueInt()))
 EndFunction
 
 Function SetupPresets()
@@ -222,6 +245,7 @@ EndFunction
 ; on re-sets the borrowed Pip-Boy colour.
 Function UpdateLive()
 	Refresh()
+	ApplyWorldTint()
 	If Swapped
 		Var[] color = ColorArgs()
 		Int c = 0
@@ -237,9 +261,11 @@ EndFunction
 Function SetEnabled(Bool on)
 	If on
 		TCU_Enabled.SetValueInt(1)
-		Return ; shows from the next terminal on
+		ApplyWorldTint()
+		Return ; the menu tint shows from the next terminal on
 	EndIf
 	TCU_Enabled.SetValueInt(0)
+	ApplyWorldTint()
 	RestorePipboyColor()
 	Var[] white = new Var[3]
 	white[0] = 255
