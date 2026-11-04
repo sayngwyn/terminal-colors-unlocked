@@ -21,10 +21,17 @@
 #include <atomic>
 #include <chrono>
 #include <cmath>
+#include <filesystem>
 #include <future>
 #include <thread>
 #include <unordered_set>
 #include <vector>
+
+// The terminal origin probe (SelfTestOrigin.h) is private and needs ModLabs' test kit: used only when both exist.
+#if __has_include("SelfTestOrigin.h") && __has_include(<modlabs/testkit.h>)
+#	include "SelfTestOrigin.h"
+#	define TCU_ORIGIN_PROBE 1
+#endif
 
 namespace TCU::SelfTest
 {
@@ -292,6 +299,11 @@ namespace TCU::SelfTest
 		if (started.exchange(true)) {
 			return;
 		}
+#ifdef TCU_ORIGIN_PROBE
+		if (SelfTestOrigin::TryStart()) {
+			return;
+		}
+#endif
 		TCU_LOG("Test: self-test build; waiting for the world");
 		std::thread(Run).detach();
 	}

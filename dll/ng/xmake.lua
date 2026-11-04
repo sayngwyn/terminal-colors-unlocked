@@ -24,6 +24,10 @@ target("TerminalColorsUnlocked")
     })
 
     add_options("selftest")
+    -- Optional (self-test builds only): a folder holding modlabs/testkit.h, for the private origin probe.
+    if os.getenv("TCU_TESTKIT") and os.getenv("TCU_TESTKIT") ~= "" then
+        add_includedirs(os.getenv("TCU_TESTKIT"))
+    end
     add_files("src/**.cpp")
     add_headerfiles("src/**.h", "../src/**.h")
     add_includedirs("src", "../src")

@@ -17,7 +17,8 @@ set OUT=build
 set SELFTEST=OFF
 if /i "%~1"=="test" (set OUT=build-test& set SELFTEST=ON)
 cd /d "%~dp0"
-cmake -S . -B %OUT% -G Ninja -DCMAKE_BUILD_TYPE=Release -DTCU_SELFTEST=%SELFTEST% ^
+rem Optional, test builds only: a folder holding modlabs\testkit.h (TCU_TESTKIT), for the private origin probe.
+cmake -S . -B %OUT% -G Ninja -DCMAKE_BUILD_TYPE=Release -DTCU_SELFTEST=%SELFTEST% -DTCU_TESTKIT="%TCU_TESTKIT%" ^
  -DCOMMONLIBF4_DIR="%OG%\CommonLibF4\CommonLibF4" ^
  -DCMAKE_TOOLCHAIN_FILE="%VCPKG_ROOT%\scripts\buildsystems\vcpkg.cmake" ^
  -DVCPKG_TARGET_TRIPLET=x64-windows-static-md -DVCPKG_HOST_TRIPLET=x64-windows-static-md ^

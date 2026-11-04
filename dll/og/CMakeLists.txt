@@ -26,6 +26,11 @@ add_library(TerminalColorsUnlocked SHARED src/main.cpp src/pch.h ../src/Natives.
 option(TCU_SELFTEST "Build the in-game self-test" OFF)
 if(TCU_SELFTEST)
 	target_compile_definitions(TerminalColorsUnlocked PRIVATE TCU_SELFTEST)
+	# Optional: a folder holding modlabs/testkit.h, for the private origin probe (never in a release).
+	set(TCU_TESTKIT "" CACHE PATH "folder holding modlabs/testkit.h")
+	if(TCU_TESTKIT)
+		target_include_directories(TerminalColorsUnlocked PRIVATE "${TCU_TESTKIT}")
+	endif()
 endif()
 set_target_properties(TerminalColorsUnlocked PROPERTIES CXX_STANDARD 23 CXX_STANDARD_REQUIRED ON)
 target_compile_definitions(TerminalColorsUnlocked PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX UNICODE _UNICODE)

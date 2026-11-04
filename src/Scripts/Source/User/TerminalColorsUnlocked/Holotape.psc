@@ -1,6 +1,6 @@
 Scriptname TerminalColorsUnlocked:Holotape extends Terminal
 {The configuration holotape's menus, for players without MCM. Attached to
-all three of its terminal pages. Item IDs: 1-5 main page, 11-15 presets,
+all three of its terminal pages. Item IDs: 1-7 main page, 11-15 presets,
 21-26 colour steps (red up, red down, green up, ...).}
 
 TerminalColorsUnlocked:Main Property TCU_MainQuest Auto Const Mandatory
@@ -15,13 +15,19 @@ Event OnMenuItemRun(int auiMenuItemID, ObjectReference akTerminalRef)
 		TCU_MainQuest.SetEnabled(False)
 	ElseIf id == 5
 		TCU_MainQuest.ShowColor()
+	ElseIf id == 6
+		TCU_MainQuest.SetHolotapeMode(1) ; holotapes on the Pip-Boy: terminal colour
+	ElseIf id == 7
+		TCU_MainQuest.SetHolotapeMode(0) ; holotapes on the Pip-Boy: Pip-Boy colour
 	ElseIf id >= 11 && id <= 15
+		TCU_MainQuest.PreviewTape() ; this tape is on the Pip-Boy: show the change
 		TCU_MainQuest.ChoosePreset(id - 10)
 	ElseIf id >= 21 && id <= 26
 		Int step = StepSize
 		If (id - 21) % 2 == 1
 			step = -StepSize
 		EndIf
+		TCU_MainQuest.PreviewTape()
 		TCU_MainQuest.Nudge((id - 21) / 2, step)
 	EndIf
 EndEvent

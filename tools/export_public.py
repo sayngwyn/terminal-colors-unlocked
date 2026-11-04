@@ -22,7 +22,10 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 BRANCH = "public"
 PRIVATE = ["STATUS.md", "STATUS-archive.md", "CLAUDE.md", "reports",  # project records
-           "tools/selftest.json"]  # dev-side in-game test spec
+           "tools/selftest.json",  # dev-side in-game test spec
+           "tools/selftest-holotape.json",  # dev-side spec of the terminal origin probe (ModLabs' test kit)
+           "tools/selftest-preview.json", "tools/selftest-load.json", "tools/selftest-save.json", "tools/test-probe",  # the settings-tape preview and the load-an-older-save tests (hook builds of Main.psc)
+           "dll/src/SelfTestOrigin.h"]  # that probe (needs ModLabs' test kit; SelfTest.h uses it only when present)
 
 
 def git(*args: str, env: dict | None = None) -> str:

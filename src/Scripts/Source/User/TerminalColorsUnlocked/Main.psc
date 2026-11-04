@@ -7,6 +7,9 @@ GlobalVariable Property TCU_Red Auto Const Mandatory
 GlobalVariable Property TCU_Green Auto Const Mandatory
 GlobalVariable Property TCU_Blue Auto Const Mandatory
 GlobalVariable Property TCU_Preset Auto Const Mandatory
+; What a holotape played on the Pip-Boy is drawn in: 0 = the Pip-Boy colour
+; (default), 1 = the terminal colour.
+GlobalVariable Property TCU_HolotapeMode Auto Const Mandatory
 Holotape Property TCU_ConfigHolotape Auto Const Mandatory
 
 ; The configuration holotape is given once, also on saves made before it existed.
@@ -23,8 +26,18 @@ Int[] PresetGreen
 Int[] PresetBlue
 
 ; Menus that draw terminal text: terminals, holotapes played in a terminal,
-; and the terminal's button bar.
+; and the terminal's button bar. A holotape played on the Pip-Boy opens
+; TerminalMenu and its buttons, not the holotape menu; see PipboyTapeOpen.
 String[] Menus
+
+; True from the opening of a terminal menu started by a holotape played on the
+; Pip-Boy (not a terminal used in the world) until TerminalMenu closes.
+Bool PipboyTapeOpen
+
+; True once the settings holotape (open on the Pip-Boy) ran a colour action: it then
+; shows the terminal colour as a live preview, not the Pip-Boy colour, until
+; TerminalMenu closes. See PreviewTape.
+Bool TapePreview
 
 String Property TintAsset = "TerminalColorsUnlocked/Tint.swf" AutoReadOnly
 
@@ -67,6 +80,8 @@ Function Setup()
 	; A terminal can't be open across a load, and the game's settings are
 	; the player's own again, so there's nothing to put back.
 	Swapped = False
+	PipboyTapeOpen = False
+	TapePreview = False
 	; Setup can run twice at once (OnInit and a load event). The flag is set
 	; before the item is added, so only one run gives it.
 	If !HolotapeGiven
@@ -164,21 +179,123 @@ Event OnMenuOpenCloseEvent(String asMenuName, Bool abOpening)
 	If !abOpening
 		TintPaths[i] = ""
 		If i == 0
+			PipboyTapeOpen = False
+			TapePreview = False
 			RestorePipboyColor()
+		ElseIf i == 1 && !UI.IsMenuOpen(Menus[0])
+			PipboyTapeOpen = False
+			TapePreview = False
 		EndIf
 		Return
 	EndIf
+	; A terminal opened by a holotape played on the Pip-Boy is told from one
+	; used in the world by the player's state (measured on 1.10.163 and
+	; 1.11.240): a world terminal sits the player at the furniture (sit state 3)
+	; and locks movement; a Pip-Boy holotape does neither. The flag stays until
+	; the terminal closes.
+	If !PipboyTapeOpen && IsPipboyTapeNow()
+		PipboyTapeOpen = True
+	EndIf
+	Debug.Trace("TerminalColorsUnlocked: opened " + asMenuName + " FXOn=" + PipboyFXOn() + " holotapeMode=" + TCU_HolotapeMode.GetValueInt() + " pipboyTape=" + PipboyTapeOpen)
 	If TCU_Enabled.GetValueInt() == 0
 		Return
 	EndIf
+	; A Pip-Boy holotape set to the Pip-Boy colour: with FX on the game draws it
+	; in that colour itself, so nothing is swapped or tinted.
 	If PipboyFXOn()
-		If i == 0
+		If i == 0 && !TapeKeepsPipboyColor()
 			SwapPipboyColor()
 		EndIf
 		Return
 	EndIf
+	; FX off: tint it with the player's own Pip-Boy colour, which needs the DLL
+	; to read. Without it (or without the setting), leave the game's colour.
+	If TapeKeepsPipboyColor() && !CanReadPipboyColor()
+		Return
+	EndIf
 	UI.Load(asMenuName, "root1", TintAsset, Self, "OnTintLoaded")
 EndEvent
+
+; True when the terminal opening now comes from a holotape played on the Pip-Boy.
+Bool Function IsPipboyTapeNow()
+	; Movement controls are on for a Pip-Boy tape (also while seated) and off at a world terminal.
+	Return Game.IsMovementControlsEnabled()
+EndFunction
+
+; True while a terminal opened by a Pip-Boy holotape is up and holotapes are
+; set to use the Pip-Boy colour (not while the settings tape previews a colour).
+Bool Function TapeKeepsPipboyColor()
+	Return PipboyTapeOpen && !TapePreview && TCU_HolotapeMode.GetValueInt() == 0
+EndFunction
+
+; The settings holotape ran a colour action (Holotape.psc calls this first): its
+; open screen now shows the terminal colour, so the change can be seen, until
+; TerminalMenu closes. Other Pip-Boy holotapes keep the Pip-Boy colour.
+Function PreviewTape()
+	If !PipboyTapeOpen || TapePreview || TCU_Enabled.GetValueInt() == 0
+		Return
+	EndIf
+	TapePreview = True
+	Debug.Trace("TerminalColorsUnlocked: preview tape FXOn=" + PipboyFXOn())
+	If PipboyFXOn()
+		; The game draws the screen in the Pip-Boy colour: borrow it, as for any terminal.
+		If UI.IsMenuOpen(Menus[0])
+			SwapPipboyColor()
+			If !UI.IsMenuOpen(Menus[0])
+				RestorePipboyColor()
+			EndIf
+		EndIf
+		Return
+	EndIf
+	; FX off: tint with the terminal colour. A menu that got no tint at its opening
+	; (the Pip-Boy colour could not be read) gets one now.
+	Int i = 0
+	While i < Menus.Length
+		If UI.IsMenuOpen(Menus[i])
+			If TintPaths[i] == ""
+				UI.Load(Menus[i], "root1", TintAsset, Self, "OnTintLoaded")
+			Else
+				ApplyColor(i)
+			EndIf
+		EndIf
+		i += 1
+	EndWhile
+EndFunction
+
+; True when the DLL is loaded and the game knows the Pip-Boy colour settings.
+Bool Function CanReadPipboyColor()
+	Return DllVersion > 0 && TerminalColorsUnlockedNative.HasINISetting(PipboyColorSettings[0])
+EndFunction
+
+; The colour one menu is tinted with: the player's Pip-Boy colour for a
+; Pip-Boy holotape set to follow it, otherwise the terminal colour. White (no
+; tint) when the Pip-Boy colour can't be read.
+Var[] Function MenuColorArgs(Int i)
+	If TapeKeepsPipboyColor()
+		If CanReadPipboyColor()
+			Return PipboyColorArgs()
+		EndIf
+		Var[] white = new Var[3]
+		white[0] = 255
+		white[1] = 255
+		white[2] = 255
+		Return white
+	EndIf
+	Return ColorArgs()
+EndFunction
+
+; The player's own Pip-Boy colour as 0-255 (the game keeps it as 0-1 floats).
+; Needs the DLL; callers check CanReadPipboyColor first.
+Var[] Function PipboyColorArgs()
+	Var[] args = new Var[3]
+	Int c = 0
+	While c < 3
+		Float f = TerminalColorsUnlockedNative.GetINIFloat(PipboyColorSettings[c])
+		args[c] = Clamp((f * 255.0 + 0.5) as Int)
+		c += 1
+	EndWhile
+	Return args
+EndFunction
 
 ; True when the DLL is loaded and the player has Pip-Boy FX on.
 Bool Function PipboyFXOn()
@@ -226,10 +343,10 @@ EndFunction
 
 ; Sends the current colour to the tint clip in one open menu.
 Function ApplyColor(Int i)
-	If TintPaths[i] == "" || !UI.IsMenuOpen(Menus[i])
+	If TintPaths[i] == "" || !UI.IsMenuOpen(Menus[i]) || TCU_Enabled.GetValueInt() == 0
 		Return
 	EndIf
-	UI.Invoke(Menus[i], TintPaths[i] + ".SetColor", ColorArgs())
+	UI.Invoke(Menus[i], TintPaths[i] + ".SetColor", MenuColorArgs(i))
 EndFunction
 
 ; Re-applies the colour to every open terminal menu (after a settings change).
@@ -278,6 +395,24 @@ Function SetEnabled(Bool on)
 		EndIf
 		i += 1
 	EndWhile
+EndFunction
+
+; mode 0 = holotapes on the Pip-Boy use the Pip-Boy colour, 1 = the terminal colour.
+Function SetHolotapeMode(Int mode)
+	TCU_HolotapeMode.SetValueInt(mode)
+	Refresh()
+	; A Pip-Boy holotape is open (this settings tape, say) and FX is on: borrow the
+	; terminal colour for the Pip-Boy, or give the Pip-Boy colour back.
+	If TCU_Enabled.GetValueInt() != 0 && PipboyTapeOpen && UI.IsMenuOpen(Menus[0]) && PipboyFXOn()
+		If TapeKeepsPipboyColor()
+			RestorePipboyColor()
+		Else
+			SwapPipboyColor()
+			If !UI.IsMenuOpen(Menus[0])
+				RestorePipboyColor()
+			EndIf
+		EndIf
+	EndIf
 EndFunction
 
 Function ChoosePreset(Int p)

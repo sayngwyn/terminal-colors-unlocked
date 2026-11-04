@@ -19,6 +19,8 @@ set SELFTEST=n
 rem The test folder name is short: xmake's PCH paths for the shared library
 rem pass Windows' 260-character limit in a deep (worktree) folder otherwise.
 if /i "%~1"=="test" (set OUT=bt& set SELFTEST=y)
+rem Optional, test builds only: a folder holding modlabs\testkit.h (TCU_TESTKIT), for the private origin probe.
+if not "%SELFTEST%"=="y" set TCU_TESTKIT=
 cd /d "%~dp0"
 xmake f -c -p windows -a x64 -m releasedbg --selftest=%SELFTEST% -o %OUT% -y || exit /b 1
 xmake -y || exit /b 1

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0
+
+- Fixed: holotapes played on your Pip-Boy now keep your Pip-Boy colour, as the page says, instead of turning your terminal colour (and with Pip-Boy FX on, no longer recolouring your whole Pip-Boy while they play).
+- New: a **Pip-Boy holotapes** setting in MCM and on the settings holotape. Choose Pip-Boy colour (the default) or Terminal colour (how 1.1.0 behaved).
+- Terminals in the world and while hacking are unchanged.
+
 ## 1.1.0
 
 - New: the small prompt and blinking cursor on a terminal's screen, seen as you walk up to it, now use your colour too instead of vanilla green. Turning the mod off puts the green back.

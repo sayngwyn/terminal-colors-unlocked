@@ -1,6 +1,6 @@
 """Write TerminalColorsUnlocked.esp (ESL-flagged) from source.
 
-The plugin holds the colour globals (shared by MCM and the holotape), one
+The plugin holds the colour and holotape-mode globals (shared by MCM and the holotape), one
 start-game-enabled quest that runs TerminalColorsUnlocked:Main, and the
 configuration holotape with its three terminal pages. Record layouts are
 copied from vanilla Fallout4.esm records (GLOB, QUST DialogueGenericPlayer,
@@ -133,18 +133,31 @@ def build():
     for edid in ('TCU_ConfigHolotape', 'TCU_HolotapeMain', 'TCU_HolotapePresets', 'TCU_HolotapeColour'):
         ids[edid] = (MASTER_INDEX << 24) | next_id
         next_id += 1
+    # Added last so earlier form ids never move: what a holotape played on the
+    # Pip-Boy is drawn in (0 = Pip-Boy colour, the default; 1 = terminal colour).
+    for edid, value in [('TCU_HolotapeMode', 0)]:
+        fid = (MASTER_INDEX << 24) | next_id
+        ids[edid] = fid
+        globs.append(glob(edid, fid, value))
+        next_id += 1
     script = 'TerminalColorsUnlocked:Holotape'
     on = [ctda(GET_GLOBAL_VALUE, ids['TCU_Enabled'], 1.0)]
     off = [ctda(GET_GLOBAL_VALUE, ids['TCU_Enabled'], 1.0, NOT_EQUAL)]
+    tape_pipboy = [ctda(GET_GLOBAL_VALUE, ids['TCU_HolotapeMode'], 0.0)]
+    tape_terminal = [ctda(GET_GLOBAL_VALUE, ids['TCU_HolotapeMode'], 0.0, NOT_EQUAL)]
     pages = [
         terminal('TCU_HolotapeMain', ids['TCU_HolotapeMain'], script, quest_id, 'Terminal Colors Unlocked',
                  [('Terminal colouring is ON.', on), ('Terminal colouring is OFF.', off),
+                  ('Holotapes played on your Pip-Boy use your Pip-Boy colour.', tape_pipboy),
+                  ('Holotapes played on your Pip-Boy use the terminal colour.', tape_terminal),
                   ('Changes show at once on an open terminal, otherwise the next time you use one.', [])],
                  [('Turn terminal colouring off', FORCE_REDRAW, 2, 0, on),
                   ('Turn terminal colouring on', FORCE_REDRAW, 1, 0, off),
                   ('Choose a preset colour', SUBMENU, 3, ids['TCU_HolotapePresets'], []),
                   ('Adjust red, green and blue', SUBMENU, 4, ids['TCU_HolotapeColour'], []),
-                  ('Show the current colour', FORCE_REDRAW, 5, 0, [])]),
+                  ('Show the current colour', FORCE_REDRAW, 5, 0, []),
+                  ('Holotapes: use the terminal colour', FORCE_REDRAW, 6, 0, tape_pipboy),
+                  ('Holotapes: use the Pip-Boy colour', FORCE_REDRAW, 7, 0, tape_terminal)]),
         terminal('TCU_HolotapePresets', ids['TCU_HolotapePresets'], script, quest_id, 'Preset colours',
                  [('Pick a colour. Tab goes back.', [])],
                  [(name, FORCE_REDRAW, 11 + i, 0, []) for i, name in enumerate(PRESET_NAMES)]),
@@ -157,7 +170,7 @@ def build():
                     ids['TCU_HolotapeMain'])
     qust = quest('TCU_MainQuest', quest_id, 'TerminalColorsUnlocked:Main',
                  [(name, ids[name]) for name in ('TCU_Enabled', 'TCU_Red', 'TCU_Green', 'TCU_Blue', 'TCU_Preset',
-                                                 'TCU_ConfigHolotape')])
+                                                 'TCU_ConfigHolotape', 'TCU_HolotapeMode')])
     record_count = len(globs) + 1 + 1 + len(pages)
     header = (sub('HEDR', struct.pack('<fiI', 1.0, record_count, next_id))
               + sub('CNAM', zstr('sayngwyn'))

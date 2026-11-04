@@ -85,6 +85,21 @@
 				"sourceType": "GlobalValue",
 				"sourceForm": "TerminalColorsUnlocked.esp|803"
 			}
+		},
+		{
+			"text": "Holotapes",
+			"type": "section"
+		},
+		{
+			"id": "HolotapeMode",
+			"text": "Pip-Boy holotapes",
+			"type": "dropdown",
+			"help": "Holotapes you play on your Pip-Boy: draw them in your Pip-Boy colour, or in the terminal colour above.",
+			"valueOptions": {
+				"sourceType": "GlobalValue",
+				"sourceForm": "TerminalColorsUnlocked.esp|80A",
+				"options": ["Pip-Boy colour", "Terminal colour"]
+			}
 		}
 	]
 }
