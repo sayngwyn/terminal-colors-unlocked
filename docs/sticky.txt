@@ -3,7 +3,7 @@ hi! a few quick answers before you post :3
 why this exists: fallout 4 draws terminals in your pip-boy colour, and with pip-boy fx off it forces plain white. lots of us turn fx off to lose the flicker, then had no easy way to colour terminals. now you pick a colour and go, no ini edits. to quote our lord and savior todd howard: it just works™
 
 [b]white pip-boy, green terminals?[/b]
-set your pip-boy colour the usual way (the game's setting or a mod), then pick the green preset in this mod's MCM. holotapes you play on your pip-boy keep your pip-boy colour, terminals in the world and while hacking use the mod's. want your terminal colour on tapes too? set "Pip-Boy holotapes" to terminal colour. thanks to DimitriDark for helping me get that one right.
+set your pip-boy colour the usual way (the game's setting or a mod), then pick the green preset in this mod's MCM. holotapes you play on your pip-boy keep your pip-boy colour, terminals in the world and while hacking use the mod's. want your terminal colour on tapes too? set "Pip-Boy holotapes" to terminal colour. thanks to [url=https://www.nexusmods.com/profile/DimitriDark]DimitriDark[/url] for helping me get that one right.
 
 [b]what is pip-boy fx?[/b]
 the bPipboyDisableFX setting in Fallout4Custom.ini. the mod works with it on or off, no change needed.
