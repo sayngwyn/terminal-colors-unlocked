@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+- New: each time a terminal or holotape opens, the mod writes a few short lines to its own log (Documents\My Games\Fallout4\F4SE\TerminalColorsUnlocked.log) saying which colour it chose and why, so a problem can be tracked down without turning on any game logging. Nothing about how it looks or plays changes.
+
 ## 1.2.0
 
 - Fixed: holotapes played on your Pip-Boy now keep your Pip-Boy colour, as the page says, instead of turning your terminal colour (and with Pip-Boy FX on, no longer recolouring your whole Pip-Boy while they play).

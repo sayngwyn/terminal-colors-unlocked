@@ -20,3 +20,8 @@ Bool Function SetWorldTint(Int r, Int g, Int b) global native
 ; DLL version 2 and up. Puts vanilla green back on terminal models and stops
 ; the live tint until SetWorldTint is called again.
 Bool Function ClearWorldTint() global native
+
+; DLL version 3 and up. Writes one line, "TerminalColorsUnlocked: <text>", to the
+; DLL's own log (F4SE\TerminalColorsUnlocked.log). Cut at 300 characters; at most
+; 1000 lines per game session, then it stops.
+Function Log(String text) global native

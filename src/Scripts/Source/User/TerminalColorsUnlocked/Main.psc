@@ -53,6 +53,8 @@ String[] PipboyColorSettings
 Int DllVersion
 ; First DLL version with SetWorldTint / ClearWorldTint.
 Int Property WorldTintDllVersion = 2 AutoReadOnly
+; First DLL version with Log (lines in the DLL's own log, F4SE\TerminalColorsUnlocked.log).
+Int Property LogDllVersion = 3 AutoReadOnly
 Bool Swapped
 Float[] SavedPipboyColor
 
@@ -108,6 +110,22 @@ Function Setup()
 	RegisterForExternalEvent("OnMCMSettingChange|" + ModName, "OnMCMSettingChange")
 	; The DLL forgets the colour when the game closes: give it again.
 	ApplyWorldTint()
+	Note("setup dll=" + DllVersion + " enabled=" + TCU_Enabled.GetValueInt() + " FXOn=" + PipboyFXOn() + " holotapeMode=" + TCU_HolotapeMode.GetValueInt() + " preset=" + TCU_Preset.GetValueInt() + " colour=" + TCU_Red.GetValueInt() + "," + TCU_Green.GetValueInt() + "," + TCU_Blue.GetValueInt())
+EndFunction
+
+; Writes a diagnostic line to the Papyrus log and, with DLL 3+, to the DLL's own
+; log (always on), so a bug report carries what the mod decided. Read-only: it
+; never changes what the mod does. Not for anything that fires every frame.
+Function Note(String text)
+	Debug.Trace("TerminalColorsUnlocked: " + text)
+	If DllVersion >= LogDllVersion
+		TerminalColorsUnlockedNative.Log(text)
+	EndIf
+EndFunction
+
+; The facts behind one opened terminal menu, for its log line. Read-only calls.
+String Function OpenInfo(String menuName, Bool movementControls, Int sitState, Bool pipboyMenuOpen, Bool tapeChecked)
+	Return "opened " + menuName + " enabled=" + TCU_Enabled.GetValueInt() + " FXOn=" + PipboyFXOn() + " holotapeMode=" + TCU_HolotapeMode.GetValueInt() + " movementControls=" + movementControls + " sitState=" + sitState + " pipboyMenuOpen=" + pipboyMenuOpen + " tapeChecked=" + tapeChecked + " pipboyTape=" + PipboyTapeOpen
 EndFunction
 
 ; The MCM page applies presets itself (instantly, see TCUSwatch.as); this
@@ -178,14 +196,17 @@ Event OnMenuOpenCloseEvent(String asMenuName, Bool abOpening)
 	EndIf
 	If !abOpening
 		TintPaths[i] = ""
+		Bool restored = False
 		If i == 0
 			PipboyTapeOpen = False
 			TapePreview = False
+			restored = Swapped
 			RestorePipboyColor()
 		ElseIf i == 1 && !UI.IsMenuOpen(Menus[0])
 			PipboyTapeOpen = False
 			TapePreview = False
 		EndIf
+		Note("closed " + asMenuName + " pipboyColourRestored=" + restored)
 		Return
 	EndIf
 	; A terminal opened by a holotape played on the Pip-Boy is told from one
@@ -193,11 +214,18 @@ Event OnMenuOpenCloseEvent(String asMenuName, Bool abOpening)
 	; 1.11.240): a world terminal sits the player at the furniture (sit state 3)
 	; and locks movement; a Pip-Boy holotape does neither. The flag stays until
 	; the terminal closes.
+	; The raw inputs of that test, read for the log line (read-only).
+	Bool movementControls = Game.IsMovementControlsEnabled()
+	Int sitState = Game.GetPlayer().GetSitState()
+	Bool pipboyMenuOpen = UI.IsMenuOpen("PipboyMenu")
+	Bool tapeChecked = !PipboyTapeOpen
 	If !PipboyTapeOpen && IsPipboyTapeNow()
 		PipboyTapeOpen = True
 	EndIf
-	Debug.Trace("TerminalColorsUnlocked: opened " + asMenuName + " FXOn=" + PipboyFXOn() + " holotapeMode=" + TCU_HolotapeMode.GetValueInt() + " pipboyTape=" + PipboyTapeOpen)
+	; One log line per opened terminal menu: the facts, then what the mod did.
+	String info = OpenInfo(asMenuName, movementControls, sitState, pipboyMenuOpen, tapeChecked)
 	If TCU_Enabled.GetValueInt() == 0
+		Note(info + " -> nothing, the mod is disabled")
 		Return
 	EndIf
 	; A Pip-Boy holotape set to the Pip-Boy colour: with FX on the game draws it
@@ -205,13 +233,24 @@ Event OnMenuOpenCloseEvent(String asMenuName, Bool abOpening)
 	If PipboyFXOn()
 		If i == 0 && !TapeKeepsPipboyColor()
 			SwapPipboyColor()
+			Note(info + " -> swapped the Pip-Boy colour to the terminal colour, swapped=" + Swapped)
+		ElseIf i == 0
+			Note(info + " -> left the game's Pip-Boy colour for a Pip-Boy tape")
+		Else
+			Note(info + " -> nothing for this menu (FX on: the TerminalMenu opening sets the colour)")
 		EndIf
 		Return
 	EndIf
 	; FX off: tint it with the player's own Pip-Boy colour, which needs the DLL
 	; to read. Without it (or without the setting), leave the game's colour.
 	If TapeKeepsPipboyColor() && !CanReadPipboyColor()
+		Note(info + " -> left the game's colour for a Pip-Boy tape (the Pip-Boy colour can't be read)")
 		Return
+	EndIf
+	If TapeKeepsPipboyColor()
+		Note(info + " -> tinting with the Pip-Boy colour")
+	Else
+		Note(info + " -> tinting with the terminal colour")
 	EndIf
 	UI.Load(asMenuName, "root1", TintAsset, Self, "OnTintLoaded")
 EndEvent
@@ -334,7 +373,7 @@ EndFunction
 Function OnTintLoaded(Bool success, String menuName, String sourceVar, String destVar, String assetPath)
 	Int i = Menus.Find(menuName)
 	If !success || i < 0
-		Debug.Trace("TerminalColorsUnlocked: tint did not load into " + menuName)
+		Note("tint did not load into " + menuName)
 		Return
 	EndIf
 	TintPaths[i] = destVar
@@ -399,6 +438,7 @@ EndFunction
 
 ; mode 0 = holotapes on the Pip-Boy use the Pip-Boy colour, 1 = the terminal colour.
 Function SetHolotapeMode(Int mode)
+	Note("holotapeMode " + TCU_HolotapeMode.GetValueInt() + " -> " + mode + " FXOn=" + PipboyFXOn() + " pipboyTape=" + PipboyTapeOpen)
 	TCU_HolotapeMode.SetValueInt(mode)
 	Refresh()
 	; A Pip-Boy holotape is open (this settings tape, say) and FX is on: borrow the

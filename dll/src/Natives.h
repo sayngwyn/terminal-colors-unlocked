@@ -5,12 +5,15 @@
 // Pip-Boy colour and whether Pip-Boy FX is on. Since version 2 they also
 // drive the live tint of the prompt on terminal models (WorldTint.h).
 
+#include <atomic>
+
 #include "WorldTint.h"
 
 namespace TCU
 {
 	// 2 (1.1): adds SetWorldTint / ClearWorldTint (live tint on terminal models).
-	inline constexpr std::int32_t kVersion = 2;
+	// 3 (1.2.1): adds Log.
+	inline constexpr std::int32_t kVersion = 3;
 
 	inline bool SameKey(std::string_view a, std::string_view b)
 	{
@@ -66,6 +69,36 @@ namespace TCU
 		return s && s->GetType() == RE::Setting::SETTING_TYPE::kBinary && s->GetBinary();
 	}
 
+	// Void Function Log(String text) global native: one line in this DLL's own log,
+	// for the decisions the scripts make (bug reports carry it). Each text is cut
+	// at kLogMaxChars; at most kLogMaxLines lines per game session come through
+	// here, then one closing line and silence. Scripts call it on menu events and
+	// setting changes, never per frame.
+	inline constexpr std::size_t kLogMaxChars = 300;
+	inline constexpr std::int32_t kLogMaxLines = 1000;
+
+	inline void Log(std::monostate, RE::BSFixedString a_text)
+	{
+		static std::atomic<std::int32_t> lines{ 0 };
+		if (lines.load() > kLogMaxLines) {
+			return;  // limit reached: drop silently
+		}
+		const auto n = lines.fetch_add(1) + 1;
+		if (n > kLogMaxLines + 1) {
+			return;  // another thread took the closing line
+		}
+		if (n == kLogMaxLines + 1) {
+			TCU_LOG("TerminalColorsUnlocked: log limit reached, no more lines");
+			return;
+		}
+		const char* raw = a_text.c_str();
+		std::string_view text = raw ? std::string_view{ raw } : std::string_view{};
+		if (text.size() > kLogMaxChars) {
+			text = text.substr(0, kLogMaxChars);
+		}
+		TCU_LOG("TerminalColorsUnlocked: {}", text);
+	}
+
 	inline bool Register(RE::BSScript::IVirtualMachine* a_vm)
 	{
 		constexpr auto script = "TerminalColorsUnlockedNative"sv;
@@ -75,6 +108,7 @@ namespace TCU
 		a_vm->BindNativeMethod(script, "GetINIBool"sv, GetINIBool, true);
 		a_vm->BindNativeMethod(script, "SetWorldTint"sv, Tint::SetWorldTint, true);
 		a_vm->BindNativeMethod(script, "ClearWorldTint"sv, Tint::ClearWorldTint, true);
+		a_vm->BindNativeMethod(script, "Log"sv, Log, true);
 		return true;
 	}
 }
