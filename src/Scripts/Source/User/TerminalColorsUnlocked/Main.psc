@@ -210,11 +210,12 @@ Event OnMenuOpenCloseEvent(String asMenuName, Bool abOpening)
 		Return
 	EndIf
 	; A terminal opened by a holotape played on the Pip-Boy is told from one
-	; used in the world by the player's state (measured on 1.10.163 and
-	; 1.11.240): a world terminal sits the player at the furniture (sit state 3)
-	; and locks movement; a Pip-Boy holotape does neither. The flag stays until
+	; used in the world by the Pip-Boy menu still being open under it (a
+	; holotape plays from the Pip-Boy, a world terminal never has it open).
+	; Movement controls and sit state are not used: a mod can leave a world
+	; terminal without either (a player's log, 1.11.250). The flag stays until
 	; the terminal closes.
-	; The raw inputs of that test, read for the log line (read-only).
+	; The raw inputs, read for the log line (read-only).
 	Bool movementControls = Game.IsMovementControlsEnabled()
 	Int sitState = Game.GetPlayer().GetSitState()
 	Bool pipboyMenuOpen = UI.IsMenuOpen("PipboyMenu")
@@ -255,10 +256,10 @@ Event OnMenuOpenCloseEvent(String asMenuName, Bool abOpening)
 	UI.Load(asMenuName, "root1", TintAsset, Self, "OnTintLoaded")
 EndEvent
 
-; True when the terminal opening now comes from a holotape played on the Pip-Boy.
+; True when the terminal opening now comes from a holotape played on the Pip-Boy:
+; the Pip-Boy menu is open under it. A world terminal opens with the Pip-Boy closed.
 Bool Function IsPipboyTapeNow()
-	; Movement controls are on for a Pip-Boy tape (also while seated) and off at a world terminal.
-	Return Game.IsMovementControlsEnabled()
+	Return UI.IsMenuOpen("PipboyMenu")
 EndFunction
 
 ; True while a terminal opened by a Pip-Boy holotape is up and holotapes are

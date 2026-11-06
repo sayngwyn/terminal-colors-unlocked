@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.2
+
+- Fixed: with 'Pip-Boy holotapes' set to Pip-Boy colour, terminals in the world kept the Pip-Boy colour for players whose terminals don't lock their movement.
+
 ## 1.2.1
 
 - New: each time a terminal or holotape opens, the mod writes a few short lines to its own log (Documents\My Games\Fallout4\F4SE\TerminalColorsUnlocked.log) saying which colour it chose and why, so a problem can be tracked down without turning on any game logging. Nothing about how it looks or plays changes.
