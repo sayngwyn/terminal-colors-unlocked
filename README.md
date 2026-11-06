@@ -65,17 +65,19 @@ In MCM, open **Terminal Colors Unlocked**. Or play the **Terminal Colors Unlocke
 
 ## Report a problem
 
-**Found a bug?** Post on the Nexus page's Bugs tab (or open an issue here) with your game version, what you saw, and this mod's log. I need it for every report, because it shows what the mod actually did:
+**Found a bug?** Post on the Nexus page's Bugs tab (or open an issue here) with your game version, what you saw, this mod's log and your load order. I need both for every report: the log shows what the mod actually did, and the load order shows what else could be changing it.
 
-`Documents\My Games\Fallout4\F4SE\TerminalColorsUnlocked.log`
+Log: `Documents\My Games\Fallout4\F4SE\TerminalColorsUnlocked.log`
 
-Send it before you start the game again, because each launch replaces it.
+Load order: `plugins.txt` in your MO2 profile folder, or in `%LOCALAPPDATA%\Fallout4` with other mod managers. On MO2, please add `modlist.txt` from the same folder.
+
+Send the log before you start the game again, because each launch replaces it.
 
 **If the game crashed,** I need two logs: this mod's log, plus the crash log from a crash logger (Buffout 4 NG or Addictol on Fallout 4). Without both, I can't tell what crashed or why.
 
-Reports without the logs are closed after 14 days. Post them later and I'll reopen the report.
+Reports without the logs and load order are closed after 14 days. Post them later and I'll reopen the report.
 
-Logs are long, so link a paste site or bring them to [Discord](https://discord.com/invite/sayngwyn). They can show your Windows username, so use a private report on Nexus if you'd rather.
+Logs and load orders are long, so link a paste site or bring them to [Discord](https://discord.com/invite/sayngwyn). Logs can show your Windows username, so use a private report on Nexus if you'd rather.
 
 ## More by sayngwyn
 
